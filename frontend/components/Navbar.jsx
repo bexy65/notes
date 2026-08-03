@@ -37,19 +37,9 @@ function Navbar() {
                 className={({ isActive }) =>
                   isActive ? "nav-link active" : "nav-link"
                 }
-                to="/notes"
+                to="/login"
               >
-                Notes
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? "nav-link active" : "nav-link"
-                }
-                to="/dashboard"
-              >
-                Dashboard
+                Login
               </NavLink>
             </li>
           </ul>
