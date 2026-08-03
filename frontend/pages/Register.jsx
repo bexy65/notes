@@ -32,9 +32,9 @@ function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+      const data = await response.json();
       if (!response.ok) {
-        setErrorMessage("Registration failed. Please try again.");
+        setErrorMessage(data.error);
         return;
       }
 

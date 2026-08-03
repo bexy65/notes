@@ -12,7 +12,7 @@ function Home() {
             organized, searchable, and always at your fingertips.
           </p>
           <div className="d-flex justify-content-center gap-2 mt-4">
-            <Link to="/register" className="btn btn-primary btn-lg px-4">
+            <Link to="/login" className="btn btn-primary btn-lg px-4">
               Get Started
             </Link>
             <Link to="/notes" className="btn btn-outline-secondary btn-lg px-4">
