@@ -1,0 +1,14 @@
+{
+  "name": "notes",
+  "version": "1.0.0",
+  "description": "Basic Notes To-Do App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Naim Ertan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
