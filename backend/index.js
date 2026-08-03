@@ -1,11 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-const app = express();
 const cors = require("cors");
+const db = require("./db");
 
 const notesData = require("./notes");
+const authRoutes = require("./auth");
+const requireAuth = require("./middleware/auth");
 
-const PORT = process.env.PORT;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(
   cors({
@@ -15,12 +18,18 @@ app.use(
   }),
 );
 
-app.get("/", (req, res) => {
-  res.send("Hello, world!");
+app.use(express.json());
+
+app.use("/", authRoutes);
+
+app.get("/notes", requireAuth, (req, res) => {
+  console.log(req.user);
+  res.json(notesData.flat());
 });
 
-app.get("/notes", (req, res) => {
-  res.json(notesData.flat());
+app.get("/test-db", async (req, res) => {
+  const [results, fields] = await db.query("SELECT * FROM `users`");
+  res.json(results[0]);
 });
 
 app.listen(PORT, () => {
