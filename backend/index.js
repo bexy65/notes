@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
+const notesData = require("./notes");
+
 const PORT = process.env.PORT;
 
 app.get("/", (req, res) => {
@@ -9,7 +11,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/notes", (req, res) => {
-  res.send("MY Note1");
+  res.json(notesData.flat());
 });
 
 app.listen(PORT, () => {
