@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ function Login() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -25,12 +27,15 @@ function Login() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
       if (!response.ok) {
         setErrorMessage("Invalid email or password");
         return;
       }
 
-      navigate("/dashboard");
+      login(data.token, data.user);
+
+      navigate("/notes");
     } catch (err) {
       setErrorMessage("Something went wrong. Please try again.");
     }
