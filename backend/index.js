@@ -21,11 +21,7 @@ app.use(
 app.use(express.json());
 
 app.use("/", authRoutes);
-
-app.get("/notes", requireAuth, (req, res) => {
-  console.log(req.user);
-  res.json(notesData.flat());
-});
+app.use("/", requireAuth, notesData);
 
 app.get("/test-db", async (req, res) => {
   const [results, fields] = await db.query("SELECT * FROM `users`");
