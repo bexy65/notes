@@ -33,13 +33,27 @@ function Notes() {
   }, [navigate]);
 
   return (
-    <div>
-      <h1>Notes</h1>
-      {notes.map((note) => (
-        <div key={note.id}>
-          <Link to={`/notes/${note.id}`}>{note.title}</Link>
+    <div className="my-4">
+      <div className="row border align-items-center">
+        <div className="col-6">
+          <h1>Notes</h1>
         </div>
-      ))}
+        <div className="col-6 text-end">
+          <button className="btn btn-primary">Create Note +</button>
+        </div>
+      </div>
+      <div className="container">
+        <div className="row justify-content-center col-12">
+          {notes.map((note) => (
+            <div className="col-12 border p-3 mb-3" key={note.id}>
+              <Link className="h3 text-black" to={`/notes/${note.id}`}>
+                {note.title}
+              </Link>
+              <p>{note.content}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
