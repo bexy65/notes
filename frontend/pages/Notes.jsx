@@ -135,18 +135,18 @@ function NoteList() {
   }, [navigate]);
 
   return (
-    <div className="my-4">
-      <div className="row align-items-center mb-2">
-        <div className="col-12 text-center col-lg-8">
+    <div className="my-4 p-0">
+      <div className="row align-items-center mb-2 p-0 m-0">
+        <div className="col-12 text-center col-md-8 col-lg-10 mb-2">
           <h1>{showNote ? "Create Note" : 'Notes'}</h1>
         </div>
-        <div className="col-12 col-lg-4 text-end">
+        <div className="col-12 col-md-4 col-lg-2 text-end">
           <button onClick={closeNoteForm} className="btn btn-primary w-100">{showNote ? "Back" : "Create note +"}
           </button>
         </div>
       </div>
-      <div className={"container " + (showNote ? "d-none" : "")}>
-        <div className="row justify-content-center col-12">
+      <div className={"container m-0 " + (showNote ? "d-none" : "")}>
+        <div className="row m-0 justify-content-center col-12">
           <Note notes={notes} onEdit={handleEdit} onDelete={handleDelete} deletingId={deletingId}/>
         </div>
       </div>
