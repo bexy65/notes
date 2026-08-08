@@ -1,9 +1,111 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import NoteForm from "../components/NoteForm";
+import Note from "../components/Note";
 
-function Notes() {
+function NoteList() {
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
+  const [showNote, setShowNote] = useState(false);
+  const [editingNote, setEditingNote] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+
+  function handleEdit(note) {
+    setEditingNote(note);
+    setShowNote(true);
+  }
+
+  async function handleDelete(note) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    setDeletingId(note.id);
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/notes/${note.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/login");
+        return;
+      }
+
+      if (response.status === 404) {
+        console.log("Note not found");
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to delete note");
+      }
+
+      setNotes((currentNotes) =>
+        currentNotes.filter((currentNote) => currentNote.id !== note.id)
+      );
+    } catch (error) {
+      console.error("Delete error:", error);
+    }
+  }
+
+  function closeNoteForm() {
+    setShowNote(!showNote);
+    setEditingNote(null);
+  }
+
+  async function handleCreate(noteFormData) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(noteFormData),
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/login");
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to create note");
+      }
+
+      const newNote = await response.json();
+
+      setNotes((currentNotes) => [
+        ...currentNotes,
+        newNote,
+      ]);
+
+      // Close form
+      setShowNote(false);
+    } catch (error) {
+      console.error("Create error:", error);
+    }
+  }
 
   useEffect(() => {
     async function getNotes() {
@@ -34,28 +136,23 @@ function Notes() {
 
   return (
     <div className="my-4">
-      <div className="row border align-items-center">
-        <div className="col-6">
-          <h1>Notes</h1>
+      <div className="row align-items-center mb-2">
+        <div className="col-12 text-center col-lg-8">
+          <h1>{showNote ? "Create Note" : 'Notes'}</h1>
         </div>
-        <div className="col-6 text-end">
-          <button className="btn btn-primary">Create Note +</button>
+        <div className="col-12 col-lg-4 text-end">
+          <button onClick={closeNoteForm} className="btn btn-primary w-100">{showNote ? "Back" : "Create note +"}
+          </button>
         </div>
       </div>
-      <div className="container">
+      <div className={"container " + (showNote ? "d-none" : "")}>
         <div className="row justify-content-center col-12">
-          {notes.map((note) => (
-            <div className="col-12 border p-3 mb-3" key={note.id}>
-              <Link className="h3 text-black" to={`/notes/${note.id}`}>
-                {note.title}
-              </Link>
-              <p>{note.content}</p>
-            </div>
-          ))}
+          <Note notes={notes} onEdit={handleEdit} onDelete={handleDelete} deletingId={deletingId}/>
         </div>
       </div>
+      {showNote ? <NoteForm  showModal={showNote} onCreate={handleCreate} setShowModal={closeNoteForm} note={editingNote}/> : null}
     </div>
   );
 }
 
-export default Notes;
+export default NoteList;

@@ -15,7 +15,7 @@ function Navbar() {
       <div className="container-fluid">
         <NavLink
           className="navbar-brand"
-          to={isAuthenticated ? "/dashboard" : "/"}
+          to={"/"}
         >
           MyNotesApp
         </NavLink>
@@ -34,16 +34,6 @@ function Navbar() {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-lg-center">
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? "nav-link active" : "nav-link"
-                }
-                to="/"
-              >
-                Home
-              </NavLink>
-            </li>
 
             {isAuthenticated ? (
               <>
