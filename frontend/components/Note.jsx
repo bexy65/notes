@@ -17,7 +17,7 @@ function Note(props) {
 
         return (
             <div
-            className="row border rounded p-3 mb-3 position-relative"
+            className="row border rounded p-3 mb-3 position-relative "
             key={note.id}
             >
             {isDeleting && (
@@ -35,14 +35,14 @@ function Note(props) {
                 </div>
             )}
 
-            <div className="col-12 col-lg-8">
+            <div className="col-12 col-md-8 col-lg-10">
                 <h4>{note.title}</h4>
                 <p>{note.content}</p>
             </div>
 
-            <div className="col-12 col-md-3 mt-3 mt-lg-0">
+            <div className="col-12 col-md-4 col-lg-2 mt-3 mt-lg-0">
                 <div className="row">
-                    <div className="col-12 col-lg-6 mb-2 mb-lg-0">
+                    <div className="col-12 py-1">
                         <button
                         onClick={() => handleEdit(note)}
                         className="btn btn-warning btn-sm w-100"
@@ -52,7 +52,7 @@ function Note(props) {
                         </button>
                     </div>
 
-                    <div className="col-12 col-lg-6">
+                    <div className="col-12 py-1">
                         <button
                         onClick={() => handleDelete(note)}
                         className="btn btn-danger btn-sm w-100"

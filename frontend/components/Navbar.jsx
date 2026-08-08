@@ -47,10 +47,17 @@ function Navbar() {
                     Notes
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active" : "nav-link"
+                    }
+                    to="/account-settings"
+                  >
+                    {user?.first_name}
+                  </NavLink>
+                </li>
                 <li className="nav-item ms-lg-2">
-                  <span className="navbar-text text-light me-3">
-                    Hi, {user?.first_name}
-                  </span>
                   <button
                     className="btn btn-outline-light btn-sm"
                     onClick={handleLogout}
