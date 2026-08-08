@@ -4,8 +4,6 @@ const noteModel = require("./models/noteModel");
 
 const router = express.Router();
 
-router.use(requireAuth);
-
 router.get("/notes", async (req, res) => {
   const notes = await noteModel.getAllNotesByUser(req.user.id);
   res.json(notes);

@@ -23,11 +23,6 @@ app.use(express.json());
 app.use("/", authRoutes);
 app.use("/", requireAuth, notesData);
 
-app.get("/test-db", async (req, res) => {
-  const [results, fields] = await db.query("SELECT * FROM `users`");
-  res.json(results[0]);
-});
-
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
