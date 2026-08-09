@@ -74,7 +74,7 @@ function NoteForm(props) {
   }
 
   return (
-    <div className="border p-3 ">
+    <div className="p-3 my-4 col-12 col-lg-6 mx-auto">
       <form onSubmit={handleSubmit}>
         <div className="row m-0 mb-3">
           <input
@@ -114,7 +114,7 @@ function NoteForm(props) {
           )}
         </div>
         
-        <div className="row col-12 col-md-6 col-lg-2 m-0">
+        <div className="row col-12 col-md-6 col-lg-4 m-0">
           <button type="submit" className="btn btn-primary">
             {props.note ? "Save Changes" : "Create Note"}
           </button>

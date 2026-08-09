@@ -42,23 +42,23 @@ function Note(props) {
 
             <div className="col-12 col-md-4 col-lg-2 mt-3 mt-lg-0">
                 <div className="row">
-                    <div className="col-12 py-1">
+                    <div className="col-6 py-1">
                         <button
                         onClick={() => handleEdit(note)}
                         className="btn btn-warning btn-sm w-100"
                         disabled={isDeleting}
                         >
-                        Edit
+                        <i class="bi bi-pen"></i>
                         </button>
                     </div>
 
-                    <div className="col-12 py-1">
+                    <div className="col-6 py-1">
                         <button
                         onClick={() => handleDelete(note)}
                         className="btn btn-danger btn-sm w-100"
                         disabled={isDeleting}
                         >
-                        {isDeleting ? "Deleting..." : "Delete"}
+                        <i class="bi bi-trash"></i>
                         </button>
                     </div>
                     </div>

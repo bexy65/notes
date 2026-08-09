@@ -141,7 +141,14 @@ function NoteList() {
           <h1>{showNote ? "Create Note" : 'Notes'}</h1>
         </div>
         <div className="col-12 col-md-4 col-lg-2 text-end">
-          <button onClick={closeNoteForm} className="btn btn-primary w-100">{showNote ? "Back" : "Create note +"}
+          <button onClick={closeNoteForm} className="btn btn-primary w-100">
+            {showNote ? (
+              "Back"
+            ) : (
+              <>
+                Create Note <i className="bi bi-clipboard2-plus"></i>
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -150,7 +157,9 @@ function NoteList() {
           <Note notes={notes} onEdit={handleEdit} onDelete={handleDelete} deletingId={deletingId}/>
         </div>
       </div>
-      {showNote ? <NoteForm  showModal={showNote} onCreate={handleCreate} setShowModal={closeNoteForm} note={editingNote}/> : null}
+      <div>
+        {showNote ? <NoteForm  showModal={showNote} onCreate={handleCreate} setShowModal={closeNoteForm} note={editingNote}/> : null}
+      </div>
     </div>
   );
 }
