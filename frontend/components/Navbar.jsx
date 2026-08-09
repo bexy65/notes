@@ -15,7 +15,7 @@ function Navbar() {
       <div className="container-fluid">
         <NavLink
           className="navbar-brand"
-          to={"/"}
+          to={isAuthenticated ? "/notes" : "/"}
         >
           MyNotesApp
         </NavLink>
@@ -62,7 +62,7 @@ function Navbar() {
                     className="btn btn-outline-light btn-sm"
                     onClick={handleLogout}
                   >
-                    Logout
+                    Logout <i class="bi bi-box-arrow-right mx-1"></i>
                   </button>
                 </li>
               </>
