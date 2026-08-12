@@ -1,138 +1,125 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NoteForm from "../components/NoteForm";
 import Note from "../components/Note";
+import { useApi } from "../hooks/apiHook";
 
 function NoteList() {
   const [notes, setNotes] = useState([]);
-  const navigate = useNavigate();
   const [showNote, setShowNote] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  
+  const { authenticatedFetch } = useApi();
 
   function handleEdit(note) {
     setEditingNote(note);
     setShowNote(true);
   }
 
-  async function handleDelete(note) {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    setDeletingId(note.id);
-
-    try {
-      const response = await fetch(
-        `http://localhost:3000/notes/${note.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/login");
-        return;
-      }
-
-      if (response.status === 404) {
-        console.log("Note not found");
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error("Failed to delete note");
-      }
-
-      setNotes((currentNotes) =>
-        currentNotes.filter((currentNote) => currentNote.id !== note.id)
-      );
-    } catch (error) {
-      console.error("Delete error:", error);
-    }
-  }
-
   function closeNoteForm() {
-    setShowNote(!showNote);
+    setShowNote((current) => !current);
     setEditingNote(null);
   }
 
-  async function handleCreate(noteFormData) {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
+ async function getNotes() {
     try {
-      const response = await fetch("http://localhost:3000/notes", {
+      const response = await authenticatedFetch("http://localhost:3000/notes");
+
+      if (!response) return;
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch notes");
+      }
+
+      const data = await response.json();
+      setNotes(data);
+    } catch (error) {
+      console.error("Fetch notes error:", error);
+    }
+  }
+
+  async function handleCreate(noteFormData) {
+    try {
+      const response = await authenticatedFetch("http://localhost:3000/notes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(noteFormData),
       });
 
-      if (response.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/login");
-        return;
-      }
+      if (!response) return;
 
       if (!response.ok) {
         throw new Error("Failed to create note");
       }
 
-      const newNote = await response.json();
+      getNotes();
 
-      setNotes((currentNotes) => [
-        ...currentNotes,
-        newNote,
-      ]);
-
-      // Close form
-      setShowNote(false);
+      closeNoteForm();
     } catch (error) {
       console.error("Create error:", error);
     }
   }
 
-  useEffect(() => {
-    async function getNotes() {
-      const token = localStorage.getItem("token");
+  async function handleUpdate(noteFormData) {
+    try {
+      const response = await authenticatedFetch(
+        `http://localhost:3000/notes/${noteFormData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(noteFormData),
+        }
+      );
 
-      if (!token) {
-        navigate("/login");
-        return;
+      if (!response) return;
+
+      if (!response.ok) {
+        throw new Error("Failed to update note");
       }
 
-      const response = await fetch("http://localhost:3000/notes", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      getNotes();
 
-      if (response.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/login");
-        return;
-      }
-
-      const data = await response.json();
-      setNotes(data);
+      closeNoteForm();
+    } catch (error) {
+      console.error("Update error:", error);
     }
+  }
+
+  async function handleDelete(note) {
+    setDeletingId(note.id);
+
+    try {
+      const response = await authenticatedFetch(
+        `http://localhost:3000/notes/${note.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response) return;
+
+      if (!response.ok) {
+        throw new Error("Failed to delete note");
+      }
+
+      getNotes();
+      
+    } catch (error) {
+      console.error("Delete error:", error);
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  useEffect(() => {
     getNotes();
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="my-4 p-0">
@@ -154,11 +141,23 @@ function NoteList() {
       </div>
       <div className={"container m-0 " + (showNote ? "d-none" : "")}>
         <div className="row m-0 justify-content-center col-12">
-          <Note notes={notes} onEdit={handleEdit} onDelete={handleDelete} deletingId={deletingId}/>
+          <Note 
+          notes={notes} 
+          onEdit={handleEdit} 
+          onDelete={handleDelete} 
+          deletingId={deletingId}
+          />
         </div>
       </div>
       <div>
-        {showNote ? <NoteForm  showModal={showNote} onCreate={handleCreate} setShowModal={closeNoteForm} note={editingNote}/> : null}
+        {showNote ? 
+        <NoteForm  
+        showModal={showNote} 
+        note={editingNote}
+        onUpdate={handleUpdate} 
+        onCreate={handleCreate} 
+        setShowModal={closeNoteForm} 
+        /> : null}
       </div>
     </div>
   );
