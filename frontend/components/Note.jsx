@@ -48,7 +48,7 @@ function Note(props) {
                         className="btn btn-warning btn-sm w-100"
                         disabled={isDeleting}
                         >
-                        <i class="bi bi-pen"></i>
+                        <i className="bi bi-pen"></i>
                         </button>
                     </div>
 
@@ -58,7 +58,7 @@ function Note(props) {
                         className="btn btn-danger btn-sm w-100"
                         disabled={isDeleting}
                         >
-                        <i class="bi bi-trash"></i>
+                        <i className="bi bi-trash"></i>
                         </button>
                     </div>
                     </div>

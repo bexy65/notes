@@ -14,6 +14,7 @@ function NoteForm(props) {
   useEffect(() => {
     if (props.note) {
       setNoteFormData({
+        id: props.note.id,
         title: props.note.title,
         content: props.note.content,
         user_email: props.note.user_email,
@@ -32,15 +33,15 @@ function NoteForm(props) {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setNoteFormData({
-      ...noteFormData,
+    setNoteFormData(prev => ({
+      ...prev,
       [name]: value,
-    });
+    }));
 
-    setErrors({
-      ...errors,
+   setErrors(prev => ({
+      ...prev,
       [name]: "",
-    });
+    }));
   };
 
   function validateForm() {
@@ -70,7 +71,11 @@ function NoteForm(props) {
       return;
     }
 
-    props.onCreate(noteFormData);
+    if (noteFormData.id) {
+      props.onUpdate(noteFormData);
+    } else {
+      props.onCreate(noteFormData);
+    };
   }
 
   return (

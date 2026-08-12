@@ -62,7 +62,7 @@ function Navbar() {
                     className="btn btn-outline-light btn-sm"
                     onClick={handleLogout}
                   >
-                    Logout <i class="bi bi-box-arrow-right mx-1"></i>
+                    Logout <i className="bi bi-box-arrow-right mx-1"></i>
                   </button>
                 </li>
               </>
