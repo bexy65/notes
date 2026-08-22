@@ -5,6 +5,7 @@ const db = require("./db");
 
 const notesData = require("./notes");
 const authRoutes = require("./auth");
+const accountSettings = require("./accountSettings")
 const requireAuth = require("./middleware/auth");
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(express.json());
 
 app.use("/", authRoutes);
 app.use("/", requireAuth, notesData);
+app.use("/", requireAuth, accountSettings)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
