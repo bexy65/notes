@@ -15,7 +15,7 @@ function Navbar() {
       <div className="container-fluid">
         <NavLink
           className="navbar-brand"
-          to={isAuthenticated ? "/dashboard" : "/"}
+          to={isAuthenticated ? "/notes" : "/"}
         >
           MyNotesApp
         </NavLink>
@@ -34,30 +34,10 @@ function Navbar() {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-lg-center">
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? "nav-link active" : "nav-link"
-                }
-                to="/"
-              >
-                Home
-              </NavLink>
-            </li>
 
             {isAuthenticated ? (
               <>
-                <li className="nav-item">
-                  <NavLink
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                    to="/dashboard"
-                  >
-                    Dashboard
-                  </NavLink>
-                </li>
-                <li className="nav-item">
+                 <li className="nav-item">
                   <NavLink
                     className={({ isActive }) =>
                       isActive ? "nav-link active" : "nav-link"
@@ -67,15 +47,22 @@ function Navbar() {
                     Notes
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active" : "nav-link"
+                    }
+                    to="/account-settings"
+                  >
+                    {user?.first_name}
+                  </NavLink>
+                </li>
                 <li className="nav-item ms-lg-2">
-                  <span className="navbar-text text-light me-3">
-                    Hi, {user?.first_name}
-                  </span>
                   <button
                     className="btn btn-outline-light btn-sm"
                     onClick={handleLogout}
                   >
-                    Logout
+                    Logout <i className="bi bi-box-arrow-right mx-1"></i>
                   </button>
                 </li>
               </>

@@ -5,6 +5,7 @@ const db = require("./db");
 
 const notesData = require("./notes");
 const authRoutes = require("./auth");
+const accountSettings = require("./accountSettings")
 const requireAuth = require("./middleware/auth");
 
 const app = express();
@@ -21,16 +22,8 @@ app.use(
 app.use(express.json());
 
 app.use("/", authRoutes);
-
-app.get("/notes", requireAuth, (req, res) => {
-  console.log(req.user);
-  res.json(notesData.flat());
-});
-
-app.get("/test-db", async (req, res) => {
-  const [results, fields] = await db.query("SELECT * FROM `users`");
-  res.json(results[0]);
-});
+app.use("/", requireAuth, notesData);
+app.use("/", requireAuth, accountSettings)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
