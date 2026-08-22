@@ -3,14 +3,13 @@ import { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const savedUser = localStorage.getItem("user");
 
-    if (token && savedUser) {
+    if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
 
@@ -37,7 +36,9 @@ export function AuthProvider({ children }) {
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
