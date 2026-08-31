@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { useApi } from "../hooks/apiHook";
+import { useAuth } from "../context/AuthContext";
 
 
 function AccountSettings() {
   const [openChangePasswordFields, setOpenChangePasswordFields] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [error, setError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
 
+  const { user, updateUser } = useAuth();
   const { authenticatedFetch } = useApi();
-
-
-  const userRaw = localStorage.getItem('user');
-  const user = userRaw ? JSON.parse(userRaw) : null;
 
   const [formData, setFormData] = useState({
     user_id: user.id,
@@ -93,32 +92,31 @@ function AccountSettings() {
       }
     );
 
-    if(!response.ok) {
-      console.log(response.error);
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.error);
+      return;
     } else {
-      const data = await response.json();
-      localStorage.setItem('user', data);
-      user = localStorage.getItem('user');
+      setError('');
     }
-    
-      // setFormData({
-      //   user_id: user.id,
-      //   firstName: user.first_name,
-      //   lastName: user.last_name,
-      //   email: user.email,
-      //   phone: user.phone,
-      // })
-    // TODO: send formData (firstName, lastName, email, phone) to your API
+
+    const updatedUser = data.user;
+    updateUser(updatedUser);
   }
 
   return (
     <div>
       <div className="row">
-        <h2 className="text-center my-2">Account settings</h2>
+     
+        <h2 className="text-center my-4">Account settings</h2>
         <form
-          className="form border col-12 col-md-8 col-lg-6 mx-md-auto my-4"
+          className="form border py-2 col-12 col-md-8 col-lg-6 mx-md-auto mb-4"
           onSubmit={handleSubmit}
         >
+          {error && (
+            <div className="alert alert-danger" role="alert">{ error }</div>
+          )}
           <div className="row">
             <div className="mb-3 col-12 col-lg-6">
               <label htmlFor="firstName" className="form-label">First Name</label>
