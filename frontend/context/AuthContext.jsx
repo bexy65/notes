@@ -8,7 +8,6 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
-
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -28,9 +27,15 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
+  function updateUser(userData) {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+  }
+
   const value = {
     user,
     isAuthenticated: !!user,
+    updateUser,
     loading,
     login,
     logout,

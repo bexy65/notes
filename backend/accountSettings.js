@@ -7,7 +7,7 @@ router.put("/account-settings", async (req, res) => {
   const { firstName, lastName, phone, user_id } = req.body;
 
   if (!firstName || !lastName) {
-    return res.status(400).json({ error: "first_name and last_name are required" });
+    return res.status(400).json({ error: "First Name and Last Name are required!" });
   }
 
   const user = await userModel.updateUserById(
