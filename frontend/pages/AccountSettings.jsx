@@ -54,28 +54,59 @@ function AccountSettings() {
       setPasswordError("All password fields are required.");
       return;
     }
-    if (newPassword !== confirmPassword) {
-      setPasswordError("New password and confirmation do not match.");
-      return;
-    }
+
     if (newPassword.length < 8) {
       setPasswordError("New password must be at least 8 characters.");
+      return;
+    }
+    
+    if (oldPassword === newPassword) {
+      setPasswordError("New password must differ from old password!");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New password and confirmation do not match.");
       return;
     }
 
     setPasswordError("");
 
     try {
-      // TODO: replace with your actual API call
-      // await api.post('/account/change-password', { oldPassword, newPassword });
+      let data = {
+        user_id: user.id,
+        oldPassword: passwordData.oldPassword,
+        newPassword: passwordData.newPassword,
+      }
 
-      console.log("changing password", { oldPassword, newPassword });
+      const response = await authenticatedFetch(
+        `http://localhost:3000/change-password`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response) {
+        setPasswordError('Failed to update password. Please try again later.')
+        return;
+      }
+
+      if (!response.ok) {
+        const data = await response.json();
+
+        setPasswordError(data.error);
+        return;
+      }
 
       setPasswordSuccess("Password updated successfully.");
       setPasswordData({ oldPassword: "", newPassword: "", confirmPassword: "" });
       setOpenChangePasswordFields(false);
     } catch (err) {
-      setPasswordError("Failed to update password. Please try again.");
+      setPasswordError("Failed to update password. Please try again later.");
     }
   }
 
@@ -114,9 +145,6 @@ function AccountSettings() {
           className="form border py-2 col-12 col-md-8 col-lg-6 mx-md-auto mb-4"
           onSubmit={handleSubmit}
         >
-          {error && (
-            <div className="alert alert-danger" role="alert">{ error }</div>
-          )}
           <div className="row">
             <div className="mb-3 col-12 col-lg-6">
               <label htmlFor="firstName" className="form-label">First Name</label>
@@ -171,6 +199,8 @@ function AccountSettings() {
             </div>
           </div>
 
+        
+
           {openChangePasswordFields && (
             <div className="row p-2 m-0 change-password-background">
               <div className="row mt-2 m-0">
@@ -222,10 +252,7 @@ function AccountSettings() {
                 </button>
               </div>
               {passwordError && (
-                <div className="col-12 mb-2 text-danger">{passwordError}</div>
-              )}
-              {passwordSuccess && (
-                <div className="col-12 mb-2 text-success">{passwordSuccess}</div>
+                <div className="col-12 mb-2 text-center text-danger"><h5>{passwordError}</h5></div>
               )}
             </div>
           )}
@@ -243,6 +270,14 @@ function AccountSettings() {
               />
             </div>
           </div>
+
+          {error && (
+            <div className="alert alert-danger text-center" role="alert">{ error }</div>
+          )}
+
+          {passwordSuccess && (
+            <div className="col-12 mb-2 text-success">{passwordSuccess}</div>
+          )}
 
           <button type="submit" className="btn btn-primary w-100">Save changes</button>
         </form>
