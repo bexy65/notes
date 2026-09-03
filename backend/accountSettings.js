@@ -24,4 +24,20 @@ router.put("/account-settings", async (req, res) => {
   res.json({ user: user });
 });
 
+
+router.put("/change-password", async (req, res) => {
+  const { oldPassword, newPassword, user_id } = req.body;
+
+  if (!oldPassword || !newPassword) {
+    return res.status(400).json({ error: "All password fields are required" });
+  }
+  
+  const changePassword = await userModel.changeUserPassword(user_id, oldPassword, newPassword);
+  if (!changePassword) {
+    return res.status(404).json({ error: "Error on changing password please check your old password!" });
+  }
+
+  res.sendStatus(200);
+});
+
 module.exports = router;

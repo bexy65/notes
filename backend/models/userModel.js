@@ -27,15 +27,12 @@ async function updateUserById(id, firstName, lastName, phone) {
 }
 
 async function changeUserPassword(id, oldPassword, newPassword) {
-  const user = await getUser(id);
-
-  if (!user) {
-    return null;
-  }
+  const [rows] = await db.query("SELECT id, password FROM users WHERE id = ?", [id]);
+  const user = rows[0];
 
   const passwordMatches = await bcrypt.compare(oldPassword, user.password);
   if (!passwordMatches) {
-    return null;
+    return false;
   }
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -43,7 +40,8 @@ async function changeUserPassword(id, oldPassword, newPassword) {
     "UPDATE users SET password = ? WHERE id = ?",
     [hashedPassword, user.id],
   );
-  return result.affectedRows;
+
+  return result.affectedRows > 0;
 }
 
 module.exports = {
