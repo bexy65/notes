@@ -44,8 +44,17 @@ async function changeUserPassword(id, oldPassword, newPassword) {
   return result.affectedRows > 0;
 }
 
+async function getStatistics() {
+  const [rows] = await db.query(
+    "SELECT COUNT(*) AS total FROM users"
+  );
+
+  return rows[0].total;
+}
+
 module.exports = {
   getUser,
   changeUserPassword,
-  updateUserById
+  updateUserById,
+  getStatistics
 };

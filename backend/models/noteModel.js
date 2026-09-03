@@ -39,10 +39,19 @@ async function deleteNote(id, userId) {
   return result.affectedRows;
 }
 
+async function getStatistics() {
+  const [rows] = await db.query(
+    "SELECT COUNT(*) AS total FROM notes"
+  );
+
+  return rows[0].total;
+}
+
 module.exports = {
   getAllNotesByUser,
   getNoteById,
   createNote,
   updateNote,
   deleteNote,
+  getStatistics
 };

@@ -1,10 +1,36 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 
 function Home() {
+  const [notesTotal, setNotesTotal] = useState(0);
+  const [usersTotal, setUsersTotal] = useState(0);
+
+
+  async function getStatistics() {
+    try {
+      const response = await fetch("http://localhost:3000/api/totals");
+      if (!response.ok) {
+        throw new Error("Failed to fetch statistics");
+      }
+
+      const data = await response.json();
+      setNotesTotal(data.notes);
+      setUsersTotal(data.users);
+    } catch (error) {
+      console.error("Fetch notes error:", error);
+    }
+  }
+
+  useEffect(() => {
+    getStatistics();
+  }, []);
+
+
   return (
     <div>
       {/* Hero section */}
-      <div className="p-5 mb-4 bg-light rounded-3 text-center">
+      <div className="p-5 mb-4 bg-light rounded-3 text-center mt-4">
         <div className="container-fluid py-4">
           <h1 className="display-5 fw-bold">Welcome to MyNotesApp</h1>
           <p className="col-lg-8 mx-auto fs-5 text-muted">
@@ -14,9 +40,6 @@ function Home() {
           <div className="d-flex justify-content-center gap-2 mt-4">
             <Link to="/login" className="btn btn-primary btn-lg px-4">
               Get Started
-            </Link>
-            <Link to="/notes" className="btn btn-outline-secondary btn-lg px-4">
-              View Notes
             </Link>
           </div>
         </div>
@@ -65,19 +88,15 @@ function Home() {
 
         {/* Stats / info strip */}
         <div className="row text-center bg-light rounded-3 py-4 mb-5">
-          <div className="col-6 col-md-3">
-            <h3 className="fw-bold mb-0">10k+</h3>
+          <div className="col-6 col-md-4">
+            <h3 className="fw-bold mb-0">{notesTotal}+</h3>
             <p className="text-muted">Notes Created</p>
           </div>
-          <div className="col-6 col-md-3">
-            <h3 className="fw-bold mb-0">2.5k</h3>
+          <div className="col-6 col-md-4">
+            <h3 className="fw-bold mb-0">{usersTotal}</h3>
             <p className="text-muted">Active Users</p>
           </div>
-          <div className="col-6 col-md-3">
-            <h3 className="fw-bold mb-0">99.9%</h3>
-            <p className="text-muted">Uptime</p>
-          </div>
-          <div className="col-6 col-md-3">
+          <div className="col-6 col-md-4">
             <h3 className="fw-bold mb-0">24/7</h3>
             <p className="text-muted">Support</p>
           </div>
