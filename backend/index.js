@@ -4,6 +4,7 @@ const cors = require("cors");
 const db = require("./db");
 
 const notesData = require("./notes");
+const homeHandler = require("./home");
 const authRoutes = require("./auth");
 const accountSettings = require("./accountSettings")
 const requireAuth = require("./middleware/auth");
@@ -21,6 +22,7 @@ app.use(
 
 app.use(express.json());
 
+app.use("/", homeHandler);
 app.use("/", authRoutes);
 app.use("/", requireAuth, notesData);
 app.use("/", requireAuth, accountSettings)

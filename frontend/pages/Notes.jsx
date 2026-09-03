@@ -23,7 +23,7 @@ function NoteList() {
     setEditingNote(null);
   }
 
- async function getNotes() {
+  async function getNotes() {
     try {
       const response = await authenticatedFetch("http://localhost:3000/notes");
 
