@@ -7,7 +7,6 @@ const router = express.Router();
 router.get("/api/totals", async (req, res) => {
     const notes = await noteModel.getStatistics();
     const users = await userModel.getStatistics();
-    console.log("INSIDE")
 
     res.json({ users: users, notes:notes });
 });
