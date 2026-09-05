@@ -7,7 +7,7 @@ function Note(props) {
         className="col-md-6 col-lg-4"
         >
 			<div className="row border rounded m-0 p-2 h-100 items-center">
-                <div className="border col-8 h-100">
+                <div className="col-8 h-100">
                     <h4>{note.title}</h4>
                     <p className="text-truncate m-0">{note.content}</p>
                 </div>

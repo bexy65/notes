@@ -131,39 +131,14 @@ function NoteList() {
     );
   });
 
-  function filterSearch(string) {
-    setSearchTerm(string);
-    let currentNotes = notes;
-    
-    const results = notes.filter(note => {
-      const search = searchTerm.toLowerCase();
-
-      return (
-        note.title.toLowerCase().includes(search) ||
-        note.content.toLowerCase().includes(search)
-      );
-    });
-
-    if(string != '') {
-      setNotes(results);
-    } else {
-      setNotes(currentNotes);
-    }
-  }
-
-  // const results = products.filter(product =>
-  //   product.title.toLowerCase().includes(search.toLowerCase())
-  // );
-
-
   useEffect(() => {
     getNotes();
   }, []);
 
   return (
     <div className="my-4 p-0">
-      <div className="row align-items-center mb-2 p-0 m-0">
-        <div className="col-12 text-center col-md-8 col-lg-10 mb-2">
+      <div className="row align-items-center mb-2 p-0 mb-3 m-0">
+        <div className="col-12 text-center text-lg-start col-md-8 col-lg-10 mb-2">
           <h1>{showNote ? "Create Note" : 'Notes'}</h1>
         </div>
         <div className="col-12 col-md-4 col-lg-2 text-end">
@@ -179,12 +154,14 @@ function NoteList() {
         </div>
       </div>
       {!showNote &&
-        <div className="container col-12 my-3">
-          <input name="searchTerm" type="text" className="form-control" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+        <div className="row m-0">
+            <div className="col-12 col-lg-4 text-end">
+              <input name="searchTerm" type="text" className="form-control" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+            </div>
         </div>
-      }
+      } 
       <div className={"container m-0 " + (showNote ? "d-none" : "")}>
-        <div className="row m-0 justify-content-center col-12">
+        <div className="row  justify-content-center col-12">
           <Note 
           notes={filteredNotes} 
           onEdit={handleEdit} 
