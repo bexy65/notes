@@ -10,6 +10,7 @@ function NoteList() {
   const [editingNote, setEditingNote] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const { authenticatedFetch } = useApi();
 
@@ -121,6 +122,40 @@ function NoteList() {
     }
   }
 
+  const filteredNotes = notes.filter(note => {
+    const search = searchTerm.toLowerCase().trim();
+
+    return (
+      note.title.toLowerCase().includes(search) ||
+      note.content.toLowerCase().includes(search)
+    );
+  });
+
+  function filterSearch(string) {
+    setSearchTerm(string);
+    let currentNotes = notes;
+    
+    const results = notes.filter(note => {
+      const search = searchTerm.toLowerCase();
+
+      return (
+        note.title.toLowerCase().includes(search) ||
+        note.content.toLowerCase().includes(search)
+      );
+    });
+
+    if(string != '') {
+      setNotes(results);
+    } else {
+      setNotes(currentNotes);
+    }
+  }
+
+  // const results = products.filter(product =>
+  //   product.title.toLowerCase().includes(search.toLowerCase())
+  // );
+
+
   useEffect(() => {
     getNotes();
   }, []);
@@ -143,10 +178,15 @@ function NoteList() {
           </button>
         </div>
       </div>
+      {!showNote &&
+        <div className="container col-12 my-3">
+          <input name="searchTerm" type="text" className="form-control" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+        </div>
+      }
       <div className={"container m-0 " + (showNote ? "d-none" : "")}>
         <div className="row m-0 justify-content-center col-12">
           <Note 
-          notes={notes} 
+          notes={filteredNotes} 
           onEdit={handleEdit} 
           onDelete={handleDelete} 
           deletingId={deletingId}
