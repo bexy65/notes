@@ -65,10 +65,6 @@ function NoteList() {
     }
   }
 
-  function handleReorder(newNotes) {
-    setNotes(newNotes);
-  }
-
   async function handleUpdate(noteFormData) {
     try {
       const response = await authenticatedFetch(
@@ -167,7 +163,6 @@ function NoteList() {
           onEdit={handleEdit} 
           onDelete={handleDelete} 
           deletingId={deletingId}
-          onReorder={handleReorder}
           />
         </div>
       </div>
