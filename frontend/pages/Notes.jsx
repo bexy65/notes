@@ -137,7 +137,7 @@ function NoteList() {
 
   return (
     <div className="my-4 p-0">
-      <div className="row align-items-center mb-2 p-0 mb-3 m-0">
+      <div className="row align-items-center mb-2 p-0 mb-3 m-0 border-bottom">
         <div className="col-12 text-center text-lg-start col-md-8 col-lg-10 mb-2">
           <h1>{showNote ? "Create Note" : 'Notes'}</h1>
         </div>
