@@ -9,7 +9,12 @@ function Note(props) {
 			<div className="row border rounded m-0 p-2 h-100 items-center">
                 <div className="col-8 h-100">
                     <h4>{note.title}</h4>
-                    <p className="text-truncate m-0">{note.content}</p>
+                    <div
+                        className="text-truncate"
+                        dangerouslySetInnerHTML={{
+                        __html: window.DOMPurify.sanitize(note.content),
+                        }}
+                    />
                 </div>
                 <div className="col-4 my-2">
                     <div className="col-12 mb-2">

@@ -77,7 +77,7 @@ function NoteForm(props) {
     setNoteFormData(prev => ({
       ...prev,
       'content': content,
-    }));s
+    }));
   }
 
   function handleSubmit(e) {
