@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Editor } from "./Editor";
 
 function NoteForm(props) {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -10,6 +11,14 @@ function NoteForm(props) {
   });
 
   const [errors, setErrors] = useState({});
+
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['clean']
+    ],
+  };
 
   useEffect(() => {
     if (props.note) {
@@ -64,6 +73,13 @@ function NoteForm(props) {
     return Object.keys(newErrors).length === 0;
   }
 
+  function handleChangeContent(content) {
+    setNoteFormData(prev => ({
+      ...prev,
+      'content': content,
+    }));s
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -100,17 +116,13 @@ function NoteForm(props) {
           )}
         </div>
 
-        <div className="row m-0 mb-3">
-          <input
-            className={`col-6 form-control ${
-              errors.content ? "is-invalid" : ""
-            }`}
-            type="text"
-            name="content"
-            placeholder="Content"
-            value={noteFormData.content}
-            onChange={handleChange}
-          />
+        <div className="row mb-3">
+          <div className="my-3">
+            <Editor 
+              value={noteFormData.content}
+              onChange={handleChangeContent}
+            />
+          </div>
 
           {errors.content && (
             <div className="invalid-feedback">
