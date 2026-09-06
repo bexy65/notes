@@ -10,6 +10,7 @@ function NoteList() {
   const [editingNote, setEditingNote] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const { authenticatedFetch } = useApi();
 
@@ -121,14 +122,23 @@ function NoteList() {
     }
   }
 
+  const filteredNotes = notes.filter(note => {
+    const search = searchTerm.toLowerCase().trim();
+
+    return (
+      note.title.toLowerCase().includes(search) ||
+      note.content.toLowerCase().includes(search)
+    );
+  });
+
   useEffect(() => {
     getNotes();
   }, []);
 
   return (
     <div className="my-4 p-0">
-      <div className="row align-items-center mb-2 p-0 m-0">
-        <div className="col-12 text-center col-md-8 col-lg-10 mb-2">
+      <div className="row align-items-center mb-2 p-0 mb-3 m-0">
+        <div className="col-12 text-center text-lg-start col-md-8 col-lg-10 mb-2">
           <h1>{showNote ? "Create Note" : 'Notes'}</h1>
         </div>
         <div className="col-12 col-md-4 col-lg-2 text-end">
@@ -143,10 +153,17 @@ function NoteList() {
           </button>
         </div>
       </div>
+      {!showNote &&
+        <div className="row m-0">
+            <div className="col-12 col-lg-4 text-end">
+              <input name="searchTerm" type="text" className="form-control" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+            </div>
+        </div>
+      } 
       <div className={"container m-0 " + (showNote ? "d-none" : "")}>
-        <div className="row m-0 justify-content-center col-12">
+        <div className="row  justify-content-center col-12">
           <Note 
-          notes={notes} 
+          notes={filteredNotes} 
           onEdit={handleEdit} 
           onDelete={handleDelete} 
           deletingId={deletingId}
