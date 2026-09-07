@@ -1,4 +1,8 @@
 Basic note app: 
+
+To start: the server (backend) - npm run dev
+To start: the client (frontend) - npm run dev
+
 ###
     CRUD Operations and search operation on Notes.
     Register functionality.
