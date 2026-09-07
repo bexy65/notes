@@ -32,7 +32,7 @@ function Home() {
       {/* Hero section */}
       <div className="p-5 mb-4 bg-light rounded-3 text-center mt-4">
         <div className="container-fluid py-4">
-          <h1 className="display-5 fw-bold">Welcome to MyNotesApp</h1>
+          <h1 className="display-5 fw-bold">Yet another note app</h1>
           <p className="col-lg-8 mx-auto fs-5 text-muted">
             A simple place to capture your thoughts, tasks, and ideas —
             organized, searchable, and always at your fingertips.

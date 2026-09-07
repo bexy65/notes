@@ -17,7 +17,7 @@ function Navbar() {
           className="navbar-brand"
           to={isAuthenticated ? "/notes" : "/"}
         >
-          MyNotesApp
+          Yet another note app
         </NavLink>
 
         <button
